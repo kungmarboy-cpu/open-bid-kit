@@ -27,4 +27,5 @@ Thumbs.db
 node_modules/
 
 # GitHub workflow dir (push requires PAT with workflow scope)
-.github/
+
+
