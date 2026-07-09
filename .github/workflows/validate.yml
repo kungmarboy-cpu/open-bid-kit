@@ -1,0 +1,58 @@
+﻿name: Validate Plugin
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".codex-plugin/**"
+      - "skills/**"
+      - "scripts/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      
+      - name: Validate plugin
+        run: |
+          python -c "
+          import json, os, re
+          errors = []
+          # Validate plugin.json
+          with open('.codex-plugin/plugin.json') as f:
+              m = json.load(f)
+          for req in ['name', 'version', 'description', 'author.name', 'interface.displayName']:
+              keys = req.split('.')
+              val = m
+              for k in keys:
+                  val = val.get(k, {}) if isinstance(val, dict) else None
+              if not val:
+                  errors.append(f'Missing: {req}')
+          
+          # Check SKILL.md exists
+          if not os.path.exists('skills/SKILL.md'):
+              errors.append('Missing: skills/SKILL.md')
+          
+          # Check version is semver
+          if not re.match(r'^\d+\.\d+\.\d+', m.get('version', '')):
+              errors.append('Version must be semver')
+          
+          if errors:
+              print('Validation FAILED:')
+              for e in errors: print(f'  - {e}')
+              exit(1)
+          else:
+              print('Plugin validation PASSED')
+          "
+      
+      - name: Validate Python scripts
+        run: |
+          for f in scripts/*.py; do
+            python -m py_compile "$f" && echo "  OK: $f" || exit 1
+          done
