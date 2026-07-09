@@ -125,3 +125,10 @@ AGPL-3.0
 - [docSword](https://github.com/15831944/docSword) — 文档利器
 - [Smart-Tender](https://github.com/xxi-cc/Smart-Tender) — 智能招投标系统
 - [good-autobid](https://github.com/ImGoodBai/good-autobid) — AI标书生成器
+
+### CI 工作流
+
+插件包含 `.github/workflows/validate.yml`，提交到 GitHub 后自动验证插件结构。
+> ⚠️ 推送工作流文件需要 GitHub Personal Access Token 具备 `workflow` 权限。
+> 如果推送被拒绝，请在 [GitHub Tokens](https://github.com/settings/tokens) 创建或更新 PAT，
+> 勾选 `repo` 和 `workflow` 两个 scope，然后重新推送。
