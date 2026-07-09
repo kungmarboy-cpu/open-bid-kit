@@ -522,3 +522,138 @@ python scripts/notion-sync.py search <query>  # 搜索Notion知识库
 │  Smart-Tender / good-autobid                                    │
 └────────────────────────────────────────────────────────────────┘
 ```
+
+## 工作流八：前沿技术栈
+
+本插件集成以下全球前沿技术，将AI标书制作提升到新的高度。
+
+### 8.1 MCP (Model Context Protocol) 服务器
+
+插件内置MCP协议服务器，通过标准JSON-RPC接口向任意MCP兼容客户端暴露7项标书工具。
+
+**启动方式：**
+```bash
+# stdio模式（推荐，供MCP客户端自动连接）
+python scripts/bid-mcp-server.py
+
+# HTTP模式（供外部调试和浏览器测试）
+python scripts/bid-mcp-server.py --http --port 8900
+```
+
+**暴露的MCP工具：**
+
+| 工具名称 | 说明 | 参数 |
+|----------|------|------|
+| `extract_bid_document` | 提取标书结构 | filepath |
+| `generate_outline` | 生成标书目录 | requirements, industry |
+| `check_compliance` | 21项合规检查 | bid_file, requirements_file |
+| `preview_document` | HTML预览生成 | filepath, output_path |
+| `search_knowledgebase` | 知识库语义搜索 | query, max_results |
+| `analyze_industry` | 行业自动检测 | content |
+| `list_supported_models` | 支持的AI模型列表 | - |
+
+**MCP协议格式：**
+```json
+// 工具列表查询
+{"jsonrpc": "2.0", "method": "tools/list", "id": 1}
+// 工具调用
+{"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "analyze_industry", "arguments": {"content": "..."}}, "id": 2}
+```
+
+### 8.2 多智能体编排 (Multi-Agent Orchestration)
+
+采用4角色多智能体协作架构，各智能体专精不同领域，协同完成标书制作。
+
+**智能体团队：**
+
+| 角色 | 名称 | 职责 |
+|------|------|------|
+| Analyst | 分析专家 | 解析招标文件，提取关键信息、评分要求 |
+| Outliner | 目录规划专家 | 根据评分要求生成结构化目录树 |
+| Writer | 技术撰写专家 | 撰写各章节技术方案正文 |
+| Reviewer | 质量审核专家 | 对标书进行21项合规检查和质量评估 |
+
+**工作流程：**
+```
+Analyst（分析）→ Outliner（目录）→ Writer（撰写）→ Reviewer（审核）
+```
+
+**使用方式：**
+```bash
+# 查看所有智能体
+python scripts/bid-orchestrator.py agents
+
+# 运行完整4智能体工作流
+python scripts/bid-orchestrator.py workflow <bid-file>
+
+# 运行分析智能体
+python scripts/bid-orchestrator.py analyze <file>
+
+# 运行审核智能体
+python scripts/bid-orchestrator.py review <bid-file>
+```
+
+### 8.3 LLM-as-Judge 自动质量评估
+
+使用AI对标书进行多维度量化质量评估，替代传统人工审核。
+
+**评估维度：**
+
+| 维度 | 权重 | 评估内容 |
+|------|------|----------|
+| 内容完整性 | 25% | 所有必要章节是否齐全 |
+| 合规性 | 30% | 是否符合招标文件强制性要求 |
+| 一致性 | 15% | 各章节数据、术语是否一致 |
+| 专业性 | 20% | 语言表达和行业专业度 |
+| 格式规范 | 10% | 排版和可读性 |
+
+**使用方式：**
+```bash
+# 查看评估维度
+python scripts/bid-evaluator.py dimensions
+
+# 对标书进行自动评估
+python scripts/bid-evaluator.py evaluate <bid-file> [--requirements <file>]
+```
+
+**输出示例：**
+```json
+{
+  "total_score": 0.85,
+  "total_percentage": 85.0,
+  "grade": "B",
+  "dimensions": {
+    "completeness": {"score": 0.75, "weighted_score": 0.188},
+    "consistency": {"score": 0.90, "weighted_score": 0.135},
+    ...
+  }
+}
+```
+
+### 8.4 技术架构总图
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    Open Bid Kit Pro v0.3.0                          │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┌───────────┐  ┌──────────┐  ┌───────────┐  ┌──────────────────┐  │
+│  │  MCP Server │  │ Multi-   │  │ LLM-as-   │  │    Hybrid RAG    │  │
+│  │  (7 tools)  │  │ Agent    │  │ Judge     │  │  (向量+关键词+    │  │
+│  │  JSON-RPC   │  │ Orch.    │  │ Evaluator │  │  知识图谱)       │  │
+│  └─────┬───────┘  └────┬─────┘  └─────┬─────┘  └──────────────────┘  │
+│        │               │              │                              │
+│  ┌─────┴───────────────┴──────────────┴─────────────────────────┐   │
+│  │                Codex Plugin Skills (SKILL.md)                │   │
+│  │  招标解读 │ 标书生成 │ 合规检查 │ 文档排版 │ 知识库管理       │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                                                                     │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │               CLI Tools (bid-agent.py)                        │   │
+│  │  extract │ preview │ outline │ check │ models                 │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                                                                     │
+│  Integration Layer: @电脑 | @github | @浏览器 | @notion            │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```

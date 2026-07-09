@@ -1,0 +1,8 @@
+﻿{
+  "bid-kit": {
+    "type": "stdio",
+    "command": "python",
+    "args": ["scripts/bid-mcp-server.py"],
+    "description": "Open Bid Kit Pro MCP Server - bid document tools for AI agents"
+  }
+}

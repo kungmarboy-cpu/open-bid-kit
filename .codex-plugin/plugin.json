@@ -1,7 +1,7 @@
 {
   "name": "open-bid-kit",
-  "version": "0.2.0",
-  "description": "全流程AI智能标书制作平台 - 融合易标、BidMaster-Pro、BiaoShu-SKILL、docSword、Smart-Tender、good-autobid六大开源项目精华",
+  "version": "0.3.0",
+  "description": "全流程AI智能标书制作平台 - MCP协议+多智能体编排+混合RAG+21项合规检查",
   "author": {
     "name": "Open Bid Kit",
     "url": "https://github.com/FB208/OpenBidKit_Yibiao"
@@ -20,8 +20,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Open Bid Kit Pro",
-    "shortDescription": "全流程AI标书制作 - 解析/生成/检查/排版，多行业支持，21项合规检查",
-    "longDescription": "融合六大开源标书工具的精华：易标的AI写作引擎、BidMaster-Pro的21项合规检查、BiaoShu-SKILL的多行业支持与14步自动化流水线、docSword的专业排版能力、Smart-Tender的多维审查、good-autobid的简洁工作流。支持招投标全流程：招标解读、标书生成、合规检查、文档排版、商机监控、知识库管理。",
+    "shortDescription": "MCP协议+多智能体编排 - 下一代AI标书制作",
+    "longDescription": "集成全球前沿技术：MCP(Model Context Protocol)服务器暴露7项标书工具给任意MCP客户端、4角色多智能体编排工作流、混合RAG知识图谱检索、LLM-as-Judge自动质量评估。融合六大开源标书工具精华，一站式完成招标解读/标书生成/合规检查/文档排版。",
     "developerName": "Open Bid Kit",
     "category": "Productivity",
     "capabilities": [
@@ -30,9 +30,10 @@
       "Interactive"
     ],
     "defaultPrompt": [
-      "帮我解析这份招标文件并生成标书",
-      "对标书进行21项合规检查",
-      "根据招标要求生成技术标大纲"
+      "用多智能体工作流生成这份标书",
+      "启动MCP服务器并连接标书工具",
+      "对标书进行LLM自动质量评估"
     ]
-  }
+  },
+  "mcpServers": "./.mcp.json"
 }
