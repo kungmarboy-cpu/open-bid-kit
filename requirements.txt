@@ -1,0 +1,16 @@
+﻿# Open Bid Kit Pro - Python dependencies
+# Install: pip install -r requirements.txt
+
+# Core
+markdown>=3.0          # HTML preview rendering
+requests>=2.0          # API calls (AI, Notion, etc.)
+python-dotenv>=1.0     # .env file loading
+argparse               # CLI argument handling (stdlib)
+
+# Optional - Notion integration
+# Notion SDK not strictly required; uses requests directly
+
+# Optional - PDF/Word processing
+# python-docx>=1.0     # Word document generation
+# PyMuPDF>=1.20        # PDF parsing
+# pandoc>=2.0          # Document format conversion
